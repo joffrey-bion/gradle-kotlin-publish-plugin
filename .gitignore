@@ -1,0 +1,5 @@
+.gradle
+build
+
+# for development on JetBrains machines where .idea is not globally ignored
+.idea
