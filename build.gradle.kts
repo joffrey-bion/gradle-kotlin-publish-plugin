@@ -30,7 +30,7 @@ pluginBundle {
 gradlePlugin {
     plugins {
         create("kotlinPublishPlugin") {
-            id = "org.hildan.kotlin.publish"
+            id = "org.hildan.kotlin-publish"
             displayName = "Kotlin Publish Plugin"
             description = "Configures sources and Javadoc (KDoc) jars for Kotlin JVM and MPP projects"
             implementationClass = "org.hildan.kotlin.publish.KotlinPublishPlugin"

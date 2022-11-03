@@ -24,7 +24,7 @@ Apply the plugin to your project using the `plugins` block in your `build.gradle
 
 ```kotlin
 plugins {
-    id("org.hildan.kotlin.publish") version "<version>"
+    id("org.hildan.kotlin-publish") version "<version>"
 }
 ```
 
