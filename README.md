@@ -42,7 +42,10 @@ There is no configuration for this plugin, all its functionality is automatic.
 
 In addition to what this plugin configures automatically, Maven Central requires:
 
-* developer information in the published POM
+* More information in the POM:
+    * developer information
+    * license (automatically handled by the [Github Info plugin](https://github.com/xvik/gradle-github-info-plugin))
+    * SCM (automatically handled by the [Github Info plugin](https://github.com/xvik/gradle-github-info-plugin))
 * artifact signatures
 
 Here is an example convention plugin that could be shared across subprojects:
@@ -116,7 +119,7 @@ And can then be used in subprojects like this:
 ```kotlin
 plugins {
    kotlin("multiplatform")
-   id("krossbow-publish")
+   id("myproject-publish")
 }
 
 // ...
