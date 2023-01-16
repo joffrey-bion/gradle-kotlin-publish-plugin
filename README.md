@@ -1,7 +1,7 @@
 # Kotlin Publish Plugin
 
 [![Gradle plugin version](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/org/hildan/gradle/gradle-kotlin-publish-plugin/maven-metadata.xml.svg?label=gradle&logo=gradle)](https://plugins.gradle.org/plugin/org.hildan.kotlin-publish)
-[![Github Build](https://img.shields.io/github/workflow/status/joffrey-bion/gradle-kotlin-publish-plugin/CI%20Build?label=build&logo=github)](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/actions?query=workflow%3A%22CI+Build%22)
+[![Github Build](https://img.shields.io/github/actions/workflow/status/joffrey-bion/gradle-kotlin-publish-plugin/build.yml?branch=main&logo=github)](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/actions/workflows/build.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/blob/master/LICENSE)
 
 A Gradle plugin to automatically setup source and javadoc jar publications for Kotlin projects.
