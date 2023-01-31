@@ -38,7 +38,7 @@ You can avoid repetition by using Gradle
 
 There is no configuration for this plugin, all its functionality is automatic.
 
-### Example usage for Maven Central publication
+## Example usage for Maven Central publication
 
 In addition to what this plugin configures automatically, Maven Central requires:
 
@@ -46,7 +46,7 @@ In addition to what this plugin configures automatically, Maven Central requires
     * developer information
     * license (automatically handled by the [Github Info plugin](https://github.com/xvik/gradle-github-info-plugin))
     * SCM (automatically handled by the [Github Info plugin](https://github.com/xvik/gradle-github-info-plugin))
-* artifact signatures
+* Artifact signatures (can be done using the `signing` plugin)
 
 Here is an example convention plugin that could be shared across subprojects:
 
@@ -107,9 +107,9 @@ dependencies {
     implementation(gradleKotlinDsl())
    
     // Replace versions here according to your needs
-    implementation(kotlin("gradle-plugin", "1.7.20"))
+    implementation(kotlin("gradle-plugin", "1.7.20")) // the Kotlin version used in the project
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.7.20")
-    implementation("org.hildan.gradle:gradle-kotlin-publish-plugin:0.1.0")
+    implementation("org.hildan.gradle:gradle-kotlin-publish-plugin:0.2.0")
     implementation("ru.vyarus:gradle-github-info-plugin:1.4.0")
 }
 ```
@@ -118,11 +118,11 @@ And can then be used in subprojects like this:
 
 ```kotlin
 plugins {
-   kotlin("multiplatform")
+   kotlin("multiplatform") // or kotlin("jvm") or kotlin("js")
    id("myproject-publish")
 }
 
-// ...
+// no extra config required, just the rest of your build script for this project
 ```
 
 ## License
