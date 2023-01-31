@@ -16,7 +16,7 @@ import java.net.URL
 /**
  * Applies the Maven Publish plugin and sets up Kotlin publications.
  *
- *  * If the Kotlin/JVM plugin is applied, this plugin configures publications with sources jar
+ *  * If the Kotlin/JVM or Kotlin/JS plugin is applied, this plugin configures publications with sources jar
  *    so it's on par with Kotlin/MPP
  *  * If the Dokka plugin is applied, this plugin sets up a dokkaJar task generating a javadoc jar added to all
  *    publications (the javadoc jar contains the Dokka HTML format, so it can work on other platforms than JVM)
