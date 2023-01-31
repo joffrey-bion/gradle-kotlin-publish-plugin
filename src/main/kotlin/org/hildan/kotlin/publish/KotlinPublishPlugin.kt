@@ -45,6 +45,23 @@ class KotlinPublishPlugin : Plugin<Project> {
             }
         }
 
+        // Publications are not automatically configured with Kotlin JS plugin, but they are with MPP.
+        // We align here so both MPP and JS projects have publications with sources jar setup.
+        project.pluginManager.withPlugin("org.jetbrains.kotlin.js") {
+            // for some reason the "kotlin" software component is not available immediately after application of the
+            // Kotlin/JS plugin, so we need this afterEvaluate
+            project.afterEvaluate {
+                project.configure<PublishingExtension> {
+                    publications {
+                        create<MavenPublication>("maven") {
+                            from(project.components["kotlin"])
+                            artifact(project.tasks.named("jsSourcesJar")) // by default with IR backend
+                        }
+                    }
+                }
+            }
+        }
+
         project.pluginManager.withPlugin("org.jetbrains.dokka") {
             configureDokka(project)
         }
