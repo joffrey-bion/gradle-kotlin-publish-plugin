@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.0.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.0.0) (2023-02-14)
+[View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/0.2.0...1.0.0)
+
+**Closed issues:**
+
+- Question: Does it support android library publishing? [\#5](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/issues/5)
+
+**Implemented enhancements:**
+
+- Upgrade to Gradle 8 [\#6](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/issues/6)
+
 ## [0.2.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/0.2.0) (2023-01-31)
 [View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/0.1.0...0.2.0)
 
