@@ -2,7 +2,7 @@ plugins {
     `kotlin-dsl`
     id("com.gradle.plugin-publish") version "1.1.0"
     id("org.hildan.github.changelog") version "1.12.1"
-    id("ru.vyarus.github-info") version "1.4.0"
+    id("ru.vyarus.github-info") version "1.5.0"
 }
 
 group = "org.hildan.gradle"
@@ -20,11 +20,7 @@ repositories {
 dependencies {
     compileOnly(kotlin("gradle-plugin", "1.8.0"))
     compileOnly("org.jetbrains.dokka:dokka-gradle-plugin:1.7.20")
-    compileOnly("ru.vyarus:gradle-github-info-plugin:1.4.0")
-}
-
-pluginBundle {
-    tags = listOf("kotlin", "publish", "javadoc", "dokka", "kdoc", "github", "maven")
+    compileOnly("ru.vyarus:gradle-github-info-plugin:1.5.0")
 }
 
 gradlePlugin {
@@ -34,6 +30,7 @@ gradlePlugin {
             displayName = "Kotlin Publish Plugin"
             description = "Configures sources and Javadoc (KDoc) jars for Kotlin JVM, JS and MPP projects"
             implementationClass = "org.hildan.kotlin.publish.KotlinPublishPlugin"
+            tags.set(listOf("kotlin", "publish", "javadoc", "dokka", "kdoc", "github", "maven"))
         }
     }
 }
