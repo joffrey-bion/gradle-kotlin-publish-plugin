@@ -125,6 +125,14 @@ plugins {
 // no extra config required, just the rest of your build script for this project
 ```
 
+## Gradle compatibility
+
+| Kotlin Publish Plugin | Min Gradle version |
+|-----------------------|--------------------|
+| 1.0.0                 | 8.0                |
+| 0.2.0                 | 7.6                |
+| 0.1.0                 | 7.5.1              |
+
 ## License
 
 This plugin is published under the MIT License.
