@@ -2,7 +2,7 @@ package org.hildan.kotlin.publish
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.plugins.*
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
@@ -83,6 +83,8 @@ class KotlinPublishPlugin : Plugin<Project> {
 
 private fun configureDokka(project: Project) {
     val dokkaJar by project.tasks.registering(Jar::class) {
+        group = JavaBasePlugin.DOCUMENTATION_GROUP
+        description = "Assembles Kotlin docs with Dokka into a Javadoc jar"
         archiveClassifier.set("javadoc")
         from(project.tasks.named("dokkaHtml"))
     }
