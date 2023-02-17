@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.1.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.1.0) (2023-02-17)
+[View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.0.0...1.1.0)
+
+**Implemented enhancements:**
+
+- Add proper group and description to the dokkaJar task [\#7](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/issues/7)
+
 ## [1.0.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.0.0) (2023-02-14)
 [View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/0.2.0...1.0.0)
 
