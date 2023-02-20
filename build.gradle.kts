@@ -18,7 +18,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly(kotlin("gradle-plugin", "1.8.0"))
     compileOnly("org.jetbrains.dokka:dokka-gradle-plugin:1.7.20")
     compileOnly("ru.vyarus:gradle-github-info-plugin:1.5.0")
 }
