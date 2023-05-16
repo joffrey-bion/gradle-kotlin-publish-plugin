@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.1.1](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.1.1) (2023-05-16)
+[View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.1.0...1.1.1)
+
+**Fixed bugs:**
+
+- Implicit dependency error on Gradle 8: publication tasks depend on the same `dokkaJar` output [\#12](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/issues/12)
+
+**Merged pull requests:**
+
+- Update Gradle Wrapper from 8.0 to 8.0.1 [\#8](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/8) ([@joffrey-bion](https://github.com/joffrey-bion))
+
 ## [1.1.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.1.0) (2023-02-17)
 [View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.0.0...1.1.0)
 
