@@ -82,17 +82,22 @@ class KotlinPublishPlugin : Plugin<Project> {
 }
 
 private fun configureDokka(project: Project) {
-    val dokkaJar by project.tasks.registering(Jar::class) {
-        group = JavaBasePlugin.DOCUMENTATION_GROUP
-        description = "Assembles Kotlin docs with Dokka into a Javadoc jar"
-        archiveClassifier.set("javadoc")
-        from(project.tasks.named("dokkaHtml"))
-    }
-
     project.configure<PublishingExtension> {
         // configureEach reacts on new publications being registered and configures them too
         publications.configureEach {
             if (this is MavenPublication) {
+                val publication = this
+                val dokkaJar = project.tasks.register("${publication.name}DokkaJar", Jar::class) {
+                    group = JavaBasePlugin.DOCUMENTATION_GROUP
+                    description = "Assembles Kotlin docs with Dokka into a Javadoc jar"
+                    archiveClassifier.set("javadoc")
+                    from(project.tasks.named("dokkaHtml"))
+
+                    // Each archive name should be distinct, to avoid implicit dependency issues.
+                    // We use the same format as the sources Jar tasks.
+                    // https://youtrack.jetbrains.com/issue/KT-46466
+                    archiveBaseName.set("${archiveBaseName.get()}-${publication.name}")
+                }
                 artifact(dokkaJar)
             }
         }
@@ -106,8 +111,9 @@ private fun configureDokka(project: Project) {
 }
 
 private fun Project.configureDokkaSourceLinksToGithub(githubRepoUrl: String) {
-    // HEAD points to the default branch of the repo
-    val repoBlobBaseUrl = URL("$githubRepoUrl/blob/HEAD/") // trailing slash is important in URLs!
+    // HEAD points to the default branch of the repo.
+    // The trailing slash is important for the call to URL(parent, child) below
+    val repoBlobBaseUrl = URL("$githubRepoUrl/blob/HEAD/")
 
     tasks.withType<AbstractDokkaLeafTask>().configureEach {
         dokkaSourceSets {
