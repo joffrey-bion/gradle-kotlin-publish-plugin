@@ -1,4 +1,4 @@
-name: Manual release
+name: release
 
 on:
   workflow_dispatch:
@@ -20,17 +20,18 @@ jobs:
           distribution: 'temurin'
           java-version: 11
 
-      - name: Test build before release
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build
-
-      - name: Generate Change Log
+      - name: Publish plugin to Gradle Portal
         uses: gradle/gradle-build-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          arguments: generateChangelog -Pversion=${{ inputs.version }}
+          arguments: |
+            check
+            generateChangelog
+            publishPlugins
+            -Pversion=${{ inputs.version }}
+            -Pgradle.publish.key=${{ secrets.GRADLE_API_KEY }}
+            -Pgradle.publish.secret=${{ secrets.GRADLE_API_SECRET }}
 
       - name: Commit and Push Change Log
         id: changelog-commit
