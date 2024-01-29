@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.4.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.4.0) (2024-01-29)
+[View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.3.0...1.4.0)
+
+**Implemented enhancements:**
+
+- Add workaround for overlapping outputs for signing task [\#30](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/issues/30)
+
+**Merged pull requests:**
+
+- Update Gradle Wrapper from 8.4 to 8.5 [\#24](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/24) ([@joffrey-bion](https://github.com/joffrey-bion))
+
 ## [1.3.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.3.0) (2023-10-16)
 [View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.2.0...1.3.0)
 
