@@ -8,6 +8,7 @@ import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.*
+import org.gradle.plugins.signing.*
 import org.jetbrains.dokka.gradle.*
 import ru.vyarus.gradle.plugin.github.GithubInfoExtension
 import java.io.File
@@ -62,6 +63,10 @@ class KotlinPublishPlugin : Plugin<Project> {
             }
         }
 
+        project.pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
+            fixOverlappingOutputsForSigningTask(project)
+        }
+
         project.pluginManager.withPlugin("org.jetbrains.dokka") {
             configureDokka(project)
         }
@@ -77,6 +82,26 @@ class KotlinPublishPlugin : Plugin<Project> {
                     }
                 }
             }
+        }
+    }
+}
+
+// Resolves issues with .asc task output of the sign task of native targets.
+// See: https://github.com/gradle/gradle/issues/26132
+// And: https://youtrack.jetbrains.com/issue/KT-46466
+private fun fixOverlappingOutputsForSigningTask(project: Project) {
+    project.tasks.withType<Sign>().configureEach {
+        val pubName = name.removePrefix("sign").removeSuffix("Publication")
+
+        // These tasks only exist for native targets, hence findByName() to avoid trying to find them for other targets
+
+        // Task ':linkDebugTest<platform>' uses this output of task ':sign<platform>Publication' without declaring an explicit or implicit dependency
+        project.tasks.findByName("linkDebugTest$pubName")?.let {
+            mustRunAfter(it)
+        }
+        // Task ':compileTestKotlin<platform>' uses this output of task ':sign<platform>Publication' without declaring an explicit or implicit dependency
+        project.tasks.findByName("compileTestKotlin$pubName")?.let {
+            mustRunAfter(it)
         }
     }
 }
