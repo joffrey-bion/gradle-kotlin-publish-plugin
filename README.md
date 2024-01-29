@@ -9,8 +9,8 @@ This is mainly useful for multi-project builds where this logic must be shared.
 
 This plugin automatically applies `maven-publish`, and is meant to react to other plugins:
 
- * If the Kotlin/JVM or Kotlin/JS plugin is applied, the Kotlin Publish plugin configures a Maven publication with code and sources
-   jar, so it's on par with Kotlin/MPP (which does it by default)
+ * If the Kotlin/JVM or Kotlin/JS plugin is applied, the Kotlin Publish plugin configures a Maven publication with code
+   and sources jar, so it's on par with Kotlin/MPP (which does it by default)
 
  * If the [Dokka plugin](https://github.com/Kotlin/dokka) is applied, this plugin sets up a `dokkaJar` task generating 
    a javadoc jar which is added to all publications (the javadoc jar contains the Dokka HTML format, so it can work on 
