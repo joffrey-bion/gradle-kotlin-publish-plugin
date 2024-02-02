@@ -44,7 +44,6 @@ jobs:
       - name: Create release and tag
         uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.GH_PAT }} # using personal token to trigger publish workflow
           tag_name: ${{ inputs.version }}
           target_commitish: ${{ steps.changelog-commit.outputs.sha }}
           body_path: build/reports/changelog/latest-release-body.md
