@@ -20,18 +20,14 @@ jobs:
           distribution: 'temurin'
           java-version: 11
 
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+
       - name: Publish plugin to Gradle Portal
-        uses: gradle/gradle-build-action@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          arguments: |
-            check
-            generateChangelog
-            publishPlugins
-            -Pversion=${{ inputs.version }}
-            -Pgradle.publish.key=${{ secrets.GRADLE_API_KEY }}
-            -Pgradle.publish.secret=${{ secrets.GRADLE_API_SECRET }}
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_API_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_API_SECRET }}
+        run: ./gradlew check generateChangelog publishPlugins -Pversion=${{ inputs.version }}
 
       - name: Commit and Push Change Log
         id: changelog-commit
