@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.5.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.5.0) (2024-02-03)
+[View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.4.0...1.5.0)
+
+**Merged pull requests:**
+
+- Update Gradle Wrapper from 8.5 to 8.6 [\#32](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/32) ([@joffrey-bion](https://github.com/joffrey-bion))
+
 ## [1.4.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.4.0) (2024-01-29)
 [View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.3.0...1.4.0)
 
