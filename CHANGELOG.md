@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.6.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.6.0) (2024-03-04)
+[View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.5.0...1.6.0)
+
+**Upgraded dependencies:**
+
+- Bump org.jetbrains.dokka:dokka\-gradle\-plugin from 1.9.10 to 1.9.20 [\#34](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/34) ([@dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [1.5.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.5.0) (2024-02-03)
 [View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.4.0...1.5.0)
 
