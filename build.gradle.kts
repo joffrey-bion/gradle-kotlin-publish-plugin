@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     compileOnly("org.jetbrains.dokka:dokka-gradle-plugin:1.9.20")
-    compileOnly("ru.vyarus:gradle-github-info-plugin:1.5.0")
+    compileOnly("ru.vyarus:gradle-github-info-plugin:2.0.0")
 }
 
 gradlePlugin {
