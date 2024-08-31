@@ -1,5 +1,29 @@
 # Change Log
 
+## [1.7.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.7.0) (2024-08-31)
+[View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.6.0...1.7.0)
+
+**Removals:**
+
+- Remove support for legacy standalone Kotlin/JS Gradle plugin [\#53](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/issues/53)
+
+**Merged pull requests:**
+
+- Update Gradle Wrapper from 8.9 to 8.10 [\#49](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/49) ([@joffrey-bion](https://github.com/joffrey-bion))
+- Update Gradle Wrapper from 8.7 to 8.9 [\#46](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/46) ([@joffrey-bion](https://github.com/joffrey-bion))
+- Update Gradle Wrapper from 8.6 to 8.7 [\#38](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/38) ([@joffrey-bion](https://github.com/joffrey-bion))
+
+**Upgraded dependencies:**
+
+- Bump gradle/actions from 3 to 4 [\#48](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/48) ([@dependabot[bot]](https://github.com/apps/dependabot))
+- Bump ru.vyarus.github\-info from 1.5.0 to 2.0.0 [\#37](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/37) ([@dependabot[bot]](https://github.com/apps/dependabot))
+- Bump ru.vyarus:gradle\-github\-info\-plugin from 1.5.0 to 2.0.0 [\#36](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/36) ([@dependabot[bot]](https://github.com/apps/dependabot))
+- Bump softprops/action\-gh\-release from 1 to 2 [\#35](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/pull/35) ([@dependabot[bot]](https://github.com/apps/dependabot))
+
+**Fixed bugs:**
+
+- Dokka source links are broken [\#51](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/issues/51)
+
 ## [1.6.0](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/tree/1.6.0) (2024-03-04)
 [View commits](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/compare/1.5.0...1.6.0)
 
