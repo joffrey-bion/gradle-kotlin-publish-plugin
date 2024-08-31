@@ -1,18 +1,18 @@
 package org.hildan.kotlin.publish
 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.*
 import org.gradle.api.plugins.*
-import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
-import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.provider.*
+import org.gradle.api.publish.*
+import org.gradle.api.publish.maven.*
+import org.gradle.api.publish.maven.plugins.*
+import org.gradle.api.tasks.bundling.*
 import org.gradle.kotlin.dsl.*
 import org.gradle.plugins.signing.*
 import org.jetbrains.dokka.gradle.*
-import ru.vyarus.gradle.plugin.github.GithubInfoExtension
-import java.io.File
-import java.net.URL
+import ru.vyarus.gradle.plugin.github.*
+import java.io.*
+import java.net.*
 
 /**
  * Applies the Maven Publish plugin and sets up Kotlin publications.
@@ -112,17 +112,12 @@ private fun configureDokka(project: Project) {
     }
 
     project.pluginManager.withPlugin("ru.vyarus.github-info") {
-        val github = project.extensions.getByType<GithubInfoExtension>()
-        val repoUrl = github.repositoryUrl
+        val repoUrl = project.provider { project.extensions.getByType<GithubInfoExtension>().repositoryUrl }
         project.configureDokkaSourceLinksToGithub(repoUrl)
     }
 }
 
-private fun Project.configureDokkaSourceLinksToGithub(githubRepoUrl: String) {
-    // HEAD points to the default branch of the repo.
-    // The trailing slash is important for the call to URL(parent, child) below
-    val repoBlobBaseUrl = URL("$githubRepoUrl/blob/HEAD/")
-
+private fun Project.configureDokkaSourceLinksToGithub(githubRepoUrl: Provider<String>) {
     tasks.withType<AbstractDokkaLeafTask>().configureEach {
         dokkaSourceSets {
             configureEach {
@@ -130,7 +125,8 @@ private fun Project.configureDokkaSourceLinksToGithub(githubRepoUrl: String) {
                     val sourceRootRelativePath = sourceRootDir.relativeTo(rootProject.projectDir).toSlashSeparatedString()
                     sourceLink {
                         localDirectory.set(sourceRootDir)
-                        remoteUrl.set(URL(repoBlobBaseUrl, sourceRootRelativePath))
+                        // HEAD points to the default branch of the repo.
+                        remoteUrl.set(githubRepoUrl.map { URL("$it/blob/HEAD/$sourceRootRelativePath") })
                     }
                 }
             }
