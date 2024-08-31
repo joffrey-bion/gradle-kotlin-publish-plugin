@@ -4,23 +4,25 @@
 [![Github Build](https://img.shields.io/github/actions/workflow/status/joffrey-bion/gradle-kotlin-publish-plugin/build.yml?branch=main&logo=github)](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/actions/workflows/build.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/gradle-kotlin-publish-plugin/blob/master/LICENSE)
 
-A Gradle plugin to automatically setup source and javadoc jar publications for Kotlin projects.
+A Gradle plugin to automatically setup publications for Kotlin projects.
 This is mainly useful for multi-project builds where this logic must be shared.
 
-This plugin automatically applies `maven-publish`, and is meant to react to other plugins:
+This plugin automatically takes care of the following without any configuration:
 
- * If the Kotlin/JVM or Kotlin/JS plugin is applied, the Kotlin Publish plugin configures a Maven publication with code
-   and sources jar, so it's on par with Kotlin/MPP (which does it by default)
+ * applies the `maven-publish` plugin
 
- * If the [Dokka plugin](https://github.com/Kotlin/dokka) is applied, this plugin sets up a `dokkaJar` task generating 
-   a javadoc jar which is added to all publications (the javadoc jar contains the Dokka HTML format, so it can work on 
-   other platforms than JVM)
+ * configures the POM of all Maven publications so they have a `name` and `description` matching the project
+   (these fields are required for Maven Central publication).
+
+ * If the [Dokka plugin](https://github.com/Kotlin/dokka) is applied, this plugin sets up a `dokkaJar` task generating
+  a javadoc jar which is added to all publications (the javadoc jar contains the Dokka HTML format, so it can work on
+  other platforms than JVM).
 
  * If the [Github Info plugin](https://github.com/xvik/gradle-github-info-plugin) is applied (`ru.vyarus.github-info`)
    in addition to Dokka, this plugin configures source links in Dokka to point to the sources in the Github repository.
 
-This plugin also configures the POM of all Maven publications so they have a name and description matching the project 
-or subproject to which this plugin is applied. 
+ * If the Kotlin/JVM plugin is applied, this plugin configures a Maven publication with classes and sources jar,
+   so it's on par with Kotlin/Multiplatform subprojects (the KMP plugin configures this by default).
 
 ## Usage
 
@@ -118,7 +120,7 @@ And can then be used in subprojects like this:
 
 ```kotlin
 plugins {
-   kotlin("multiplatform") // or kotlin("jvm") or kotlin("js")
+   kotlin("multiplatform") // or kotlin("jvm")
    id("myproject-publish")
 }
 
