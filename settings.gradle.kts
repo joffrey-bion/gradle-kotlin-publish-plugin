@@ -1,13 +1,13 @@
 plugins {
-    id("com.gradle.enterprise") version "3.18"
+    id("com.gradle.develocity") version "3.18"
 }
 
 rootProject.name = "gradle-kotlin-publish-plugin"
 
-gradleEnterprise {
+develocity {
     buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
-        publishAlways()
+        termsOfUseUrl = "https://gradle.com/terms-of-service"
+        termsOfUseAgree = "yes"
+        uploadInBackground = false // bad for CI, and not critical for local runs
     }
 }
