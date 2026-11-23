@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.vanniktech:gradle-maven-publish-plugin:0.33.0")
     compileOnly("org.jetbrains.dokka:dokka-gradle-plugin:2.0.0")
     compileOnly("ru.vyarus:gradle-github-info-plugin:2.0.0")
 }

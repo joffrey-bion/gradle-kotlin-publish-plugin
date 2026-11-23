@@ -1,132 +1,87 @@
 package org.hildan.kotlin.publish
 
+import com.vanniktech.maven.publish.MavenPublishPlugin
 import org.gradle.api.*
-import org.gradle.api.plugins.*
 import org.gradle.api.provider.*
 import org.gradle.api.publish.*
 import org.gradle.api.publish.maven.*
-import org.gradle.api.publish.maven.plugins.*
-import org.gradle.api.tasks.bundling.*
 import org.gradle.kotlin.dsl.*
-import org.gradle.plugins.signing.*
+import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.dokka.gradle.*
-import ru.vyarus.gradle.plugin.github.*
+import ru.vyarus.gradle.plugin.github.GithubInfoExtension
 import java.io.*
 import java.net.*
 
 /**
- * Applies the Maven Publish plugin and sets up Kotlin publications.
+ * Applies the Gradle Maven Publish Plugin by vanniktech (not the default maven-publish from Gradle) and fixes up a
+ * couple nissing.
  *
- *  * If the Kotlin/JVM or Kotlin/JS plugin is applied, this plugin configures publications with sources jar
- *    so it's on par with Kotlin/MPP
- *  * If the Dokka plugin is applied, this plugin sets up a dokkaJar task generating a javadoc jar added to all
- *    publications (the javadoc jar contains the Dokka HTML format, so it can work on other platforms than JVM)
- *  * If the Github Info plugin is applied ("ru.vyarus.github-info") in addition to Dokka, this plugin configures
- *    source links in Dokka to point to the Github repository
+ *  * If the Github Info plugin ("ru.vyarus.github-info") and the Dokka plugin are both applied,
+ *    this plugin configures source links in Dokka to point to the GitHub repository
  */
 class KotlinPublishPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.apply<MavenPublishPlugin>()
 
-        // Publications are not automatically configured with Kotlin JVM plugin, but they are with MPP.
-        // We align here so both MPP and JVM projects have publications with sources jar setup.
-        project.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-            // sourcesJar is not added by default by the Kotlin JVM plugin
-            project.configure<JavaPluginExtension>() {
-                withSourcesJar()
-            }
-
-            project.configure<PublishingExtension> {
-                publications {
-                    create<MavenPublication>("maven") {
-                        from(project.components["java"]) // java components have the sourcesJar AND the Kotlin artifacts
-                    }
-                }
-            }
-        }
-
-        project.pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
-            fixOverlappingOutputsForSigningTask(project)
-        }
-
-        project.pluginManager.withPlugin("org.jetbrains.dokka") {
-            configureDokka(project)
-        }
-
+        // the vanniktech plugin doesn't have defaults for name and description, which are necessary for Maven Central
         project.configure<PublishingExtension> {
             // configureEach reacts on new publications being registered and configures them too
             publications.configureEach {
                 if (this is MavenPublication) {
                     pom {
                         // using providers because the name and description can be set after application of the plugin
-                        name.set(project.provider { project.name })
-                        description.set(project.provider { project.description })
+                        if (!name.isPresent) {
+                            name.set(project.provider { project.name })
+                        }
+                        if (!description.isPresent) {
+                            description.set(project.provider { project.description })
+                        }
                     }
                 }
             }
         }
-    }
-}
 
-// Resolves issues with .asc task output of the sign task of native targets.
-// See: https://github.com/gradle/gradle/issues/26132
-// And: https://youtrack.jetbrains.com/issue/KT-46466
-private fun fixOverlappingOutputsForSigningTask(project: Project) {
-    project.tasks.withType<Sign>().configureEach {
-        val pubName = name.removePrefix("sign").removeSuffix("Publication")
-
-        // These tasks only exist for native targets, hence findByName() to avoid trying to find them for other targets
-
-        // Task ':linkDebugTest<platform>' uses this output of task ':sign<platform>Publication' without declaring an explicit or implicit dependency
-        project.tasks.findByName("linkDebugTest$pubName")?.let {
-            mustRunAfter(it)
-        }
-        // Task ':compileTestKotlin<platform>' uses this output of task ':sign<platform>Publication' without declaring an explicit or implicit dependency
-        project.tasks.findByName("compileTestKotlin$pubName")?.let {
-            mustRunAfter(it)
-        }
-    }
-}
-
-private fun configureDokka(project: Project) {
-    project.configure<PublishingExtension> {
-        // configureEach reacts on new publications being registered and configures them too
-        publications.configureEach {
-            if (this is MavenPublication) {
-                val publication = this
-                val dokkaJar = project.tasks.register("${publication.name}DokkaJar", Jar::class) {
-                    group = JavaBasePlugin.DOCUMENTATION_GROUP
-                    description = "Assembles Kotlin docs with Dokka into a Javadoc jar"
-                    archiveClassifier.set("javadoc")
-                    from(project.tasks.named("dokkaHtml"))
-
-                    // Each archive name should be distinct, to avoid implicit dependency issues.
-                    // We use the same format as the sources Jar tasks.
-                    // https://youtrack.jetbrains.com/issue/KT-46466
-                    archiveBaseName.set("${archiveBaseName.get()}-${publication.name}")
-                }
-                artifact(dokkaJar)
+        project.pluginManager.withPlugin("org.jetbrains.dokka") {
+            project.pluginManager.withPlugin("ru.vyarus.github-info") {
+                val repoUrl = project.provider { project.extensions.getByType<GithubInfoExtension>().repositoryUrl }
+                project.configureDokkaSourceLinksToGithub(repoUrl)
             }
         }
-    }
-
-    project.pluginManager.withPlugin("ru.vyarus.github-info") {
-        val repoUrl = project.provider { project.extensions.getByType<GithubInfoExtension>().repositoryUrl }
-        project.configureDokkaSourceLinksToGithub(repoUrl)
     }
 }
 
 private fun Project.configureDokkaSourceLinksToGithub(githubRepoUrl: Provider<String>) {
-    tasks.withType<AbstractDokkaLeafTask>().configureEach {
-        dokkaSourceSets {
-            configureEach {
-                sourceRoots.forEach { sourceRootDir ->
-                    val sourceRootRelativePath = sourceRootDir.relativeTo(rootProject.projectDir).toSlashSeparatedString()
-                    sourceLink {
-                        localDirectory.set(sourceRootDir)
-                        // HEAD points to the default branch of the repo.
-                        remoteUrl.set(githubRepoUrl.map { URL("$it/blob/HEAD/$sourceRootRelativePath") })
+    val dokkaPluginMode = project.findProperty("org.jetbrains.dokka.experimental.gradle.pluginMode")?.toString()
+    if (dokkaPluginMode in setOf("V2Enabled", "V2EnabledWithHelpers")) {
+        extensions.configure<DokkaExtension> {
+            dokkaSourceSets {
+                configureEach {
+                    sourceRoots.forEach { sourceRootDir ->
+                        val sourceRootRelativePath = sourceRootDir.relativeTo(rootProject.projectDir).toSlashSeparatedString()
+                        sourceLink {
+                            localDirectory.set(sourceRootDir)
+                            // HEAD points to the default branch of the repo.
+                            remoteUrl.set(githubRepoUrl.map { URI("$it/blob/HEAD/$sourceRootRelativePath") })
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        // I know, and no, we cannot remove duplication here. These properties / functions have the same names, but
+        // they are not on the same type, so they are different from the Dokka v2 block.
+        tasks.withType<AbstractDokkaLeafTask>().configureEach {
+            dokkaSourceSets {
+                configureEach {
+                    sourceRoots.forEach { sourceRootDir ->
+                        val sourceRootRelativePath =
+                            sourceRootDir.relativeTo(rootProject.projectDir).toSlashSeparatedString()
+                        sourceLink {
+                            localDirectory.set(sourceRootDir)
+                            // HEAD points to the default branch of the repo.
+                            remoteUrl.set(githubRepoUrl.map { URI("$it/blob/HEAD/$sourceRootRelativePath").toURL() })
+                        }
                     }
                 }
             }
